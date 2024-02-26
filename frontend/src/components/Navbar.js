@@ -7,8 +7,8 @@ function Navbar(){
             <Heading as="h1" color="purple.300">Game Hub</Heading>
             <Spacer/>
             <HStack spacing="20px">
-                <Text color="purple.300">Cart</Text>
-                <Button colorScheme='purple'>Logout</Button>
+                <Text color="purple.300" fontSize='xl'>Cart</Text>
+                <Button colorScheme='purple' fontSize='xl'>Logout</Button>
             </HStack>
         </Flex>
     )

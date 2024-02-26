@@ -12,8 +12,8 @@ const pageStyles = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    height: '100vh',
-};
+    height: '94vh',
+}
 
 const goToGames = () =>{
   navigate('/games')
@@ -26,23 +26,18 @@ const goToGames = () =>{
         <Box opacity={1}>
           <Navbar />
         </Box>
-        <Spacer />
-        <Flex alignItems="center" justifyContent="center">
-          <Box className="typewriter">
-            <Heading
-              as="h1"
-              color="purple.300"
-              style={{ marginTop: '50%', marginBottom: '20px' }}
-            >
-              Games. Unlimited Games.
-            </Heading>
-            <Flex alignItems="center" justifyContent="center">
-              <Button bg="purple.300" color="white" onClick={goToGames}>
-                Browse
-              </Button>
-            </Flex>
-          </Box>
-        </Flex>
+      <Box style={pageStyles} display="flex" justifyContent="center" alignItems="center">
+      <Flex width="100%" textAlign="center" justifyContent="center">
+      <Box className="typewriter">
+        <Heading as="h1" color="purple.300" marginBottom="20px">
+          Games. Unlimited Games.
+        </Heading>
+        <Button bg="purple.300" color="white" onClick={goToGames} marginTop="20px" fontSize="2xl">
+          Browse
+        </Button>
+      </Box>
+      </Flex>
+      </Box>
       </Box>
     </>
   );
