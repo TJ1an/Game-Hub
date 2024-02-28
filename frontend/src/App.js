@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react'
 import React, {useState, useEffect} from 'react';
-import {Home, Games} from './pages';
+import {Home, Games, GameDetails} from './pages';
 import {Navbar} from './components'
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route path = "/" element = {<Home/>}/>
         <Route path = "/games" element = {<Games/>}/>
+        <Route path = "/games/:id" element = {<GameDetails/>}/>
       </Routes>
     </Router>
     </ChakraProvider>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SimpleGrid, Box, Heading, Flex, Card, CardBody, Stack, Image, Divider, CardFooter, Button, ButtonGroup, Input, Skeleton} from '@chakra-ui/react';
+import { SimpleGrid, Box, Heading, Flex, Card, CardBody, Stack, Image, Divider, CardFooter, Button, ButtonGroup, Input, Skeleton, HStack, StackDivider} from '@chakra-ui/react';
+import { Fade, ScaleFade, Slide, SlideFade, Collapse } from '@chakra-ui/react'
 import ReactLoading from "react-loading";
 import { Navbar } from '../components';
-import layeredWaves from '../assets/plain.svg';
+import layeredWaves from '../assets/black.svg';
 
 const Games = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const Games = () => {
 
   const getGames = async () => {
     try {
-      const res = await fetch(`http://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&page=1`);
+      const res = await fetch(`http://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&page=10`);
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -85,10 +86,12 @@ if (initialloading) {
             size='md'
             htmlSize={40}
             width='auto'
-            color='white'
+            color='black'
             value={search}
             onChange={(e) => {setSearch(e.target.value)}}
             onKeyPress={handleKeyPress}
+            bgColor="white"
+            borderRadius="20px"
           />
         </Box>
         {
@@ -97,21 +100,27 @@ if (initialloading) {
         <>
         <SimpleGrid spacing={10} minChildWidth={350} p={10}>
           {[...Array(20)].map((index) => (
-            <Skeleton key={index} height="350px" width="100%" />
+            <Skeleton key={index} height="350px" width="100%" borderRadius="10px"/>
           ))}
         </SimpleGrid>
         </> :
+        <ScaleFade initialScale={0.8} in={!loading}>
         <SimpleGrid spacing={10} minChildWidth={350} p={10}>
           {data.map((game) => (
-            <Card key={game.id}>
-              <CardBody>
-                <Image src={game.background_image} alt={game.name} h='250px' borderRadius='lg' onClick={() => viewGameDetails(game.id)} />
-                <Stack mt='6' spacing='3'>
+            <Card key={game.id} borderRadius="300px">
+              <CardBody bgColor= 'rgb(30, 30, 31)' borderTopLeftRadius="20px" borderTopRightRadius="20px">
+                <Image src={game.background_image} alt={game.name} h='250px' borderRadius='lg' onClick={() => viewGameDetails(game.id)} cursor="pointer"/>
+                <HStack mt='6' spacing='3'>
                   <Heading size='md' color="purple.500">{game.name}</Heading>
-                </Stack>
+                </HStack>
+                <HStack mt='6' spacing='3'>
+                  {game.platforms.slice(0, 3).map((platform, index) => (
+                    <Heading key={index} size='3xs' color="white">{platform.platform.name}</Heading>
+                  ))}
+                </HStack>
               </CardBody>
-              <Divider />
-              <CardFooter>
+              <StackDivider bg='white' height="1px"/>
+              <CardFooter bgColor='rgb(30, 30, 31)' borderBottomLeftRadius="20px" borderBottomRightRadius="20px">
                 <ButtonGroup spacing='2'>
                   <Button variant='solid' colorScheme='purple'>
                     Buy now
@@ -124,7 +133,7 @@ if (initialloading) {
             </Card>
           ))}
         </SimpleGrid>
-
+        </ScaleFade>
         }
       </Box>
     </>

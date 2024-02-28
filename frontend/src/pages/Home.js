@@ -1,7 +1,7 @@
 import {Box, Flex, Text, Heading, Spacer, Button, Center} from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import {Navbar} from '../components'
-import layeredWaves from '../assets/layered-waves-haikei.svg';
+import layeredWaves from '../assets/black-waves.svg';
 import '../styles/styles.css'
 
 function Home() {
@@ -19,8 +19,7 @@ const goToGames = () =>{
   navigate('/games')
 }
 
-
-  return (
+return (
     <>
       <Box style={pageStyles}>
         <Box opacity={1}>
