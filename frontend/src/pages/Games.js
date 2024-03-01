@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SimpleGrid, Box, Heading, Flex, Card, CardBody, Stack, Image, Divider, CardFooter, Button, ButtonGroup, Input, Skeleton, HStack, StackDivider} from '@chakra-ui/react';
-import { Fade, ScaleFade, Slide, SlideFade, Collapse } from '@chakra-ui/react'
+import { SimpleGrid, Box, Heading, Card, CardBody, Image, CardFooter, Button, ButtonGroup, Input, Skeleton, HStack, StackDivider, Spacer, Text} from '@chakra-ui/react';
+import { ScaleFade} from '@chakra-ui/react'
 import ReactLoading from "react-loading";
 import { Navbar } from '../components';
 import layeredWaves from '../assets/black.svg';
@@ -9,7 +9,8 @@ import layeredWaves from '../assets/black.svg';
 const Games = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const [initialloading, setInitialLoading] = useState(true);
+  //const [initialloading, setInitialLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
 
@@ -27,16 +28,27 @@ const Games = () => {
 
   const getGames = async () => {
     try {
-      const res = await fetch(`http://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&page=10`);
+      setLoading(true);
+      const res = await fetch(`http://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&page=${page}`);
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
       const jsonData = await res.json();
       setData(jsonData.results.slice(0, 20))
-      setInitialLoading(false);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       // Handle error, show message to user, etc.
+    }
+  };
+
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+
+  const previousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
     }
   };
 
@@ -60,7 +72,8 @@ const Games = () => {
 
 useEffect(() => {
     getGames();
-}, [])
+    console.log(page);
+}, [page])
 
 const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -68,23 +81,23 @@ const handleKeyPress = (event) => {
     }
 };
 
-if (initialloading) {
-    return (
-      <Box className="loading-page" display="flex" justifyContent="center" alignItems="center" height="100vh" bgColor="black">
-        <ReactLoading type="spin" color="purple" height={100} width={50} />
-      </Box>
-    );
-}
+// if (initialloading) {
+//     return (
+//       <Box className="loading-page" display="flex" justifyContent="center" alignItems="center" height="100vh" bgColor="black">
+//         <ReactLoading type="spin" color="purple" height={100} width={50} />
+//       </Box>
+//     );
+// }
 
   return (
     <>
       <Box style={pageStyles} className='container'>
         <Navbar />
-        <Box display='flex' justifyContent='center' alignItems='center'>
+        <Box display='flex' justifyContent='center' alignItems='center' flexDir="row" paddingLeft = "22px">
           <Input
             placeholder='Search'
             size='md'
-            htmlSize={40}
+            htmlSize={50}
             width='auto'
             color='black'
             value={search}
@@ -133,6 +146,17 @@ if (initialloading) {
             </Card>
           ))}
         </SimpleGrid>
+        <HStack display="flex" justifyContent="center" paddingBottom="20px">
+          <Button bgColor='purple.300' color="white" variant='solid' minWidth="300px" onClick={previousPage}>
+            Previous
+          </Button>
+          <Button bgColor='purple.300' color="white" variant='solid' minWidth="300px" onClick={nextPage}>
+            Next
+          </Button>
+        </HStack>
+        <Box display="flex" justifyContent="center" paddingBottom="20px">
+          <Text color="white" border="2px" borderColor="purple.300" padding="10px" paddingLeft="20px" paddingRight="20px">{page}</Text>
+        </Box>
         </ScaleFade>
         }
       </Box>

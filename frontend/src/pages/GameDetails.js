@@ -56,8 +56,10 @@ return (
         <ScaleFade initialScale={0.8} in={!loading}>
             <VStack>
                 <Card bgColor= 'rgb(30, 30, 31)'>
-                    <CardBody bgColor= 'rgb(30, 30, 31)' borderTopLeftRadius="20px" borderTopRightRadius="20px">
+                    <CardBody bgColor= 'rgb(30, 30, 31)' borderTopLeftRadius="20px" borderTopRightRadius="20px" display="flex" justifyContent="center" alignItems="center">
+                    <Box width="50%" height="50%">
                         <Image src={details.background_image}></Image>
+                    </Box>
                     </CardBody>
                 </Card>
             </VStack>

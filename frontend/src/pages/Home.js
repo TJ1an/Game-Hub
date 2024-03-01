@@ -1,10 +1,11 @@
 import {Box, Flex, Text, Heading, Spacer, Button, Center} from '@chakra-ui/react'
+import { Fade, ScaleFade, Slide, SlideFade, Collapse } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import {Navbar} from '../components'
 import layeredWaves from '../assets/black-waves.svg';
 import '../styles/styles.css'
 
-function Home() {
+const Home = () => {
 const navigate = useNavigate();
 
 const pageStyles = {
@@ -21,6 +22,7 @@ const goToGames = () =>{
 
 return (
     <>
+    <ScaleFade initialScale={0.8} in={true}>
       <Box style={pageStyles}>
         <Box opacity={1}>
           <Navbar />
@@ -38,6 +40,7 @@ return (
       </Flex>
       </Box>
       </Box>
+    </ScaleFade>
     </>
   );
 }
