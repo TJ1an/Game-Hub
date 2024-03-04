@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react'
 import React, {useState, useEffect} from 'react';
 import {Home, Games, GameDetails} from './pages';
-import {Navbar} from './components'
+
+
 
 function App() {
   return (

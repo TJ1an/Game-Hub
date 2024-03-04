@@ -14,6 +14,7 @@ const pageStyles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '94vh',
+    fontFamily: `'Orbitron Variable', sansSerif`
 }
 
 const goToGames = () =>{
@@ -30,7 +31,7 @@ return (
       <Box style={pageStyles} display="flex" justifyContent="center" alignItems="center">
       <Flex width="100%" textAlign="center" justifyContent="center">
       <Box className="typewriter">
-        <Heading as="h1" color="purple.300" marginBottom="20px">
+        <Heading as="h1" color="purple.300" marginBottom="20px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>
           Games. Unlimited Games.
         </Heading>
         <Button bg="purple.300" color="white" onClick={goToGames} marginTop="20px" fontSize="2xl">

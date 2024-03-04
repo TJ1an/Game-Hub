@@ -4,6 +4,7 @@ import { SimpleGrid, Box, Heading, Card, CardBody, Image, CardFooter, Button, Bu
 import { ScaleFade} from '@chakra-ui/react'
 import layeredWaves from '../assets/black.svg';
 import {HamburgerIcon } from '@chakra-ui/icons'
+import '@fontsource-variable/orbitron';
 import {
   Drawer,
   DrawerBody,
@@ -17,11 +18,10 @@ import {
 const Games = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  //const [initialloading, setInitialLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [genre, setGenre] = useState('')
+  const [genre, setGenre] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure()
 
 const animationKeyframes1 = keyframes`
@@ -33,11 +33,11 @@ const animationKeyframes1 = keyframes`
   `;
 
 const animationKeyframes2 = keyframes`
-    100%{ transform: scale(1.5) rotate(0);}
+    100%{ transform: scale(1.1) rotate(0);}
   `;
 
 const animation1 = `${animationKeyframes1} 2s ease-in-out infinite`;
-const animation2 = `${animationKeyframes2} 1s ease-in-out forwards`;
+const animation2 = `${animationKeyframes2} ease-in-out forwards`;
 
 const pageStyles = {
     backgroundImage: `url(${layeredWaves})`,
@@ -45,27 +45,12 @@ const pageStyles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100%',
+    fontFamily: `'Orbitron Variable', sansSerif`
 };
 
 const viewGameDetails = (id) => {
     navigate(`/games/${id}`, { state: { id } });
 }
-
-const getGames = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`http://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&page=${page}`);
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const jsonData = await res.json();
-      setData(jsonData.results.slice(0, 20))
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Handle error, show message to user, etc.
-    }
-};
 
 const nextPage = () => {
     setPage(page + 1);
@@ -76,6 +61,23 @@ const previousPage = () => {
       setPage(page - 1);
     }
 };
+
+const getGames = async () => {
+  try {
+    setLoading(true);
+    const res = await fetch(`http://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&page=${page}`);
+    if (!res.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    const jsonData = await res.json();
+    setData(jsonData.results.slice(0, 20))
+    setLoading(false);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // Handle error, show message to user, etc.
+  }
+};
+
 
 const searchGames = async () => {
     try {
@@ -126,7 +128,6 @@ useEffect(() => {
 
 useEffect(() => {
     getGames();
-    console.log(page);
 }, [page])
 
 const handleKeyPress = (event) => {
@@ -142,7 +143,6 @@ const goHome = () =>{
   return (
     <>
       <Box style={pageStyles} className='container'>
-      <>
         <Box display="flex" flexDir="row" as="nav" p="20px" alignItems="center" pl="40px" pr="40px" justifyContent="center">
             <Box
             _hover={{
@@ -155,15 +155,17 @@ const goHome = () =>{
             </Box>
         <Drawer placement='left' onClose={onClose} isOpen={isOpen} size="xs">
             <DrawerOverlay />
-            <DrawerContent>
-            <DrawerHeader bgColor='rgb(30, 30, 31)' color="purple.300">Genres</DrawerHeader>
+            <DrawerContent style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>
+            <DrawerHeader bgColor='rgb(30, 30, 31)' color="purple.300" display="flex" justifyContent="center">Genres</DrawerHeader>
             <DrawerBody bgColor='rgb(30, 30, 31)' color="purple.300" display="flex" flexDir="column" gap="30px">
                 <Button onClick={() => {getGames(); setGenre('');}}>Popular</Button>
-                <Button onClick={() => handleClick('racing')}>Racing</Button>
-                <Button onClick={() => handleClick('action')}>Action</Button>
-                <Button onClick={() => handleClick('adventure')}>Adventure</Button>
-                <Button onClick={() => handleClick('shooter')}>Shooter</Button>
-                <Button onClick={() => handleClick('sports')}>Sports</Button>
+                <Button onClick={() => handleClick('racing')}>Racing 🏎️💨</Button>
+                <Button onClick={() => handleClick('action')}>Action 💥</Button>
+                <Button onClick={() => handleClick('adventure')}>Adventure 🧭</Button>
+                <Button onClick={() => handleClick('shooter')}>Shooter 🔫</Button>
+                <Button onClick={() => handleClick('sports')}>Sports 🏈</Button>
+                <Button onClick={() => handleClick('strategy')}>Strategy ♟️</Button>
+                <Button onClick={() => handleClick('puzzle')}>Puzzle 🧩</Button>
             </DrawerBody>
             </DrawerContent>
         </Drawer>
@@ -172,7 +174,7 @@ const goHome = () =>{
                     animation: `${animation2}`,
                     color: "white"
                 }}>
-            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="110px" _hover={{color: "white"}} onClick={() => goHome()}>Game Hub</Heading>
+            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="130px" _hover={{color: "white"}} style={{ fontFamily: `'Orbitron Variable', sansSerif` }} onClick={() => goHome()}>Game Hub</Heading>
             </Box>
             <Spacer/>
             <Box>
@@ -182,8 +184,8 @@ const goHome = () =>{
             </HStack>
             </Box>
         </Box>
-        </>
-        <Box display='flex' justifyContent='center' alignItems='center' flexDir="row" paddingLeft = "22px">
+
+        <Box display='flex' justifyContent='center' alignItems='center' flexDir="column" paddingLeft = "22px">
           <Input
             placeholder='Search'
             size='md'
@@ -196,6 +198,7 @@ const goHome = () =>{
             bgColor="white"
             borderRadius="20px"
           />
+          <Heading color="white" paddingTop="20px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>{genre ? `${genre.charAt(0).toUpperCase() + genre.slice(1)}` : "Popular 🔥"}</Heading>
         </Box>
         {
 
@@ -207,18 +210,19 @@ const goHome = () =>{
           ))}
         </SimpleGrid>
         </> :
-        <ScaleFade initialScale={0.8} in={!loading}>
+        <>
+        <ScaleFade initialScale={0.9} in={!loading}>
         <SimpleGrid spacing={10} minChildWidth={350} p={10}>
           {data.map((game) => (
             <Card key={game.id} borderRadius="300px">
               <CardBody bgColor= 'rgb(30, 30, 31)' borderTopLeftRadius="20px" borderTopRightRadius="20px">
                 <Image src={game.background_image} alt={game.name} h='250px' borderRadius='lg' onClick={() => viewGameDetails(game.id)} cursor="pointer"/>
                 <HStack mt='6' spacing='3'>
-                  <Heading size='md' color="purple.500">{game.name}</Heading>
+                  <Heading size='md' color="purple.500" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>{game.name}</Heading>
                 </HStack>
                 <HStack mt='6' spacing='3'>
                   {game.platforms.slice(0, 3).map((platform, index) => (
-                    <Heading key={index} size='3xs' color="white">{platform.platform.name}</Heading>
+                    <Heading key={index} size='3xs' color="white" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>{platform.platform.name}</Heading>
                   ))}
                 </HStack>
               </CardBody>
@@ -236,7 +240,7 @@ const goHome = () =>{
             </Card>
           ))}
         </SimpleGrid>
-        {!genre ? (
+        {genre === ''? (
           <>
             <HStack display="flex" justifyContent="center" paddingBottom="20px">
               <Button bgColor='purple.300' color="white" variant='solid' minWidth="300px" onClick={previousPage}>
@@ -252,6 +256,7 @@ const goHome = () =>{
           </>
         ) : null}
         </ScaleFade>
+        </>
         }
       </Box>
     </>
