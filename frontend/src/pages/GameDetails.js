@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { SimpleGrid, Box, Heading, Card, CardBody, Image, Skeleton, Grid, Text, HStack} from '@chakra-ui/react';
+import { SimpleGrid, Box, Heading, Card, CardBody, Image, Skeleton, Grid, Text, HStack, useBreakpointValue} from '@chakra-ui/react';
 import { useLocation, useParams } from 'react-router-dom';
 import { Fade, ScaleFade, Slide, SlideFade, Collapse } from '@chakra-ui/react'
-import layeredWaves from '../assets/black.svg';
+import ReactLoading from 'react-loading';
 import { Navbar } from '../components';
-import '@fontsource-variable/orbitron';
 
 const GameDetails = () =>{
     const [details, setDetails] = useState([]);
@@ -13,13 +12,13 @@ const GameDetails = () =>{
     const [loading, setLoading] = useState(false);
     const id = location.state.id;
 
-const pageStyles = {
-        backgroundImage: `url(${layeredWaves})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        height: '100%',
-};
+const columns = useBreakpointValue({ base: 1, md: 2 });
+
+const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+}
 
 const getGameDetails = async () => {
     try {
@@ -60,20 +59,23 @@ useEffect(() => {
     
 return (
     <>
-        <Box style={pageStyles} className='container'>
-            <Navbar />
+        <Box style={{backgroundColor: 'black', height: '100%'}} className='container'>
         {
         loading ?
         <>
-        <SimpleGrid spacing={10} minChildWidth={350} p={10}>
-            <Skeleton height="350px" width="100%" borderRadius="10px"/>
-        </SimpleGrid>
+            <Box opacity={1}>
+            <Navbar />
+            </Box>
+            <Box className="loading-page" display="flex" justifyContent="center" alignItems="center" height="100vh" bgColor="black">
+                <ReactLoading type="cubes" color="purple" height={100} width={50} />
+            </Box>
         </> :
         <ScaleFade initialScale={0.8} in={!loading}>
+        <Navbar />
         <Box display="flex" flexDirection="row" justifyContent="center">
         <Heading color="white" marginBottom="20px">{details.name}</Heading>
         </Box>
-        <Grid templateColumns='repeat(2, 1fr)' gap={4} paddingBottom="50px">
+        <Grid templateColumns={`repeat(${columns}, 1fr)`} gap={4} paddingBottom="50px" padding="50px">
                 <Card bgColor= 'rgb(30, 30, 31)'>
                     <CardBody bgColor= 'rgb(30, 30, 31)' borderTopLeftRadius="20px" borderTopRightRadius="20px" display="flex" justifyContent="center" alignItems="center">\
                     <Box>
@@ -81,6 +83,15 @@ return (
                     </Box>
                     </CardBody>
                 </Card>
+                {movie.length == 0?
+                <>
+                <Card bgColor= 'rgb(30, 30, 31)'>
+                    <CardBody bgColor='rgb(30, 30, 31)' display="flex" justifyContent="center" alignItems="center">
+                        <Heading color="white">No trailers available. Go search on youtube or smth.</Heading>
+                    </CardBody>
+                </Card>
+                
+                </>:
                 <Card  bgColor= 'rgb(30, 30, 31)'>
                 <CardBody>
                     {movie.map((movieItem, index) => (
@@ -94,10 +105,11 @@ return (
                     ))}
                     </CardBody>
                 </Card>
+                }
                 {details.description_raw && (
                 <Card  bgColor= 'rgb(30, 30, 31)'>
                     <CardBody>
-                        <Heading color={'white'}>About</Heading>
+                        <Heading color={'white'} marginBottom="20px">About</Heading>
                         <Text color="white">{extractEnglishText(details.description_raw)}</Text>    
                     </CardBody>
                 </Card>
@@ -105,25 +117,25 @@ return (
                 {details.platforms && Array.isArray(details.platforms) && (
                 <Card  bgColor= 'rgb(30, 30, 31)'>
                     <CardBody>
-                        <Text color="white">Platforms</Text>
-                        <HStack mt='6' spacing='3' marginBottom="20px">
+                    <Text color="white" fontSize='lg' as='b'>Platforms</Text>
+                        <HStack mt='6' spacing='3' marginBottom="50px" marginTop="0px">
                             {details.platforms.map((platform, index) => (
                                 <Text key={index} size='3xs' color="white">{platform.platform.name}</Text>
                             ))}
                         </HStack>
                         <HStack spacing='10'>
                             <Box>
-                                <Text color="white">Release Date</Text>
-                                <Text color="white">{details.released}</Text>
+                                <Text color="white" fontSize='lg' as='b'>Release Date</Text>
+                                <Text color="white">{formatDate(details.released)}</Text>
                             </Box>
                             <Box>
-                                <Text color="white">Publisher</Text>
+                                <Text color="white" fontSize='lg' as='b'>Publisher</Text>
                                 {details.publishers.map((publisher, index) => (
                                 <Text key={index} size='3xs' color="white">{publisher.name}</Text>
                             ))}
                             </Box>
                             <Box>
-                                <Text color="white">Metacritic Score</Text>
+                                <Text fontSize='lg'color = "white" as='b'>Metacritic Score</Text>
                                 <Text color="white">{details.metacritic}</Text>
                             </Box>
                         </HStack>

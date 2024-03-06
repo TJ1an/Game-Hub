@@ -27,7 +27,7 @@ const Navbar = () => {
                     animation: `${animation2}`,
                     color: "white"
                 }}>
-            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="170px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }} _hover={{color: "white"}} onClick={() => goHome()}>Game Hub</Heading>
+            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="150px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }} _hover={{color: "white"}} onClick={() => goHome()}>Game Hub</Heading>
             </Box>
             <Spacer/>
             <Box>

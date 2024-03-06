@@ -8,11 +8,9 @@ import '@fontsource-variable/orbitron';
 import {
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
 } from '@chakra-ui/react'
 
 const Games = () => {
@@ -38,15 +36,6 @@ const animationKeyframes2 = keyframes`
 
 const animation1 = `${animationKeyframes1} 2s ease-in-out infinite`;
 const animation2 = `${animationKeyframes2} ease-in-out forwards`;
-
-const pageStyles = {
-    backgroundImage: `url(${layeredWaves})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    height: '100%',
-    fontFamily: `'Orbitron Variable', sansSerif`
-};
 
 const viewGameDetails = (id) => {
     navigate(`/games/${id}`, { state: { id } });
@@ -142,7 +131,7 @@ const goHome = () =>{
 
   return (
     <>
-      <Box style={pageStyles} className='container'>
+      <Box style={{backgroundColor: 'black', fontFamily: `'Orbitron Variable', sansSerif`, height: '100%',}} className='container'>
         <Box display="flex" flexDir="row" as="nav" p="20px" alignItems="center" pl="40px" pr="40px" justifyContent="center">
             <Box
             _hover={{
@@ -174,7 +163,7 @@ const goHome = () =>{
                     animation: `${animation2}`,
                     color: "white"
                 }}>
-            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="130px" _hover={{color: "white"}} style={{ fontFamily: `'Orbitron Variable', sansSerif` }} onClick={() => goHome()}>Game Hub</Heading>
+            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="150px" _hover={{color: "white"}} style={{ fontFamily: `'Orbitron Variable', sansSerif` }} onClick={() => goHome()}>Game Hub</Heading>
             </Box>
             <Spacer/>
             <Box>
@@ -198,7 +187,7 @@ const goHome = () =>{
             bgColor="white"
             borderRadius="20px"
           />
-          <Heading color="white" paddingTop="20px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>{genre ? `${genre.charAt(0).toUpperCase() + genre.slice(1)}` : "Popular 🔥"}</Heading>
+          <Heading color="white" paddingTop="20px" paddingLeft="10px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>{genre ? `${genre.charAt(0).toUpperCase() + genre.slice(1)}` : "Popular 🔥"}</Heading>
         </Box>
         {
 
