@@ -1,10 +1,11 @@
 import React from 'react'
-import { useNavigate, useLocation} from 'react-router-dom';
-import {Flex, Box, Heading, Text, Button, Spacer, HStack, useDisclosure, keyframes} from "@chakra-ui/react"
+import { useNavigate} from 'react-router-dom';
+import {Box, Heading, Text, Button, Spacer, HStack, keyframes} from "@chakra-ui/react"
 import '@fontsource-variable/orbitron';
 
 const pageStyles = {
-    fontFamily: `'Orbitron Variable', sansSerif`
+    fontFamily: `'Orbitron Variable', sansSerif`,
+    backgroundColor: 'black'
 };
 
 const Navbar = () => {
@@ -19,6 +20,10 @@ const Navbar = () => {
     const goHome = () =>{
         navigate('/')
     }
+
+    const goLogin = () =>{
+        navigate('/login')
+    }
     return(
         <>
         <Box display="flex" flexDir="row" as="nav" p="20px" alignItems="center" pl="40px" pr="40px" justifyContent="center" style={pageStyles}>
@@ -27,13 +32,13 @@ const Navbar = () => {
                     animation: `${animation2}`,
                     color: "white"
                 }}>
-            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="150px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }} _hover={{color: "white"}} onClick={() => goHome()}>Game Hub</Heading>
+            <Heading size='xl' color="white" cursor="pointer" paddingLeft="150px" style={{ fontFamily: `'Orbitron Variable', sansSerif` }} _hover={{color: "white"}} onClick={() => goHome()}>Game Hub</Heading>
             </Box>
             <Spacer/>
             <Box>
             <HStack spacing="20px">
-                <Text color="purple.300" fontSize='xl'>Cart</Text>
-                <Button colorScheme='purple' fontSize='xl'>Logout</Button>
+                <Text color="white" fontSize='xl'>Cart</Text>
+                <Button colorScheme='white' fontSize='xl' onClick={() => goLogin()}>Login</Button>
             </HStack>
             </Box>
         </Box>

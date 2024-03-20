@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { SimpleGrid, Box, Heading, Card, CardBody, Image, CardFooter, Button, ButtonGroup, Input, Skeleton, HStack, StackDivider, Spacer, Text, keyframes, useDisclosure} from '@chakra-ui/react';
 import { ScaleFade} from '@chakra-ui/react'
-import layeredWaves from '../assets/black.svg';
 import {HamburgerIcon } from '@chakra-ui/icons'
 import '@fontsource-variable/orbitron';
 import {
@@ -140,13 +139,13 @@ const goHome = () =>{
                     transform: "rotate(0.5turn)",
                 }}
             >
-            <HamburgerIcon color="purple.300" boxSize={10} onClick={onOpen} cursor="pointer" _hover={{color: "white"}}/>
+            <HamburgerIcon color="white" boxSize={10} onClick={onOpen} cursor="pointer" _hover={{color: "purple.300"}}/>
             </Box>
         <Drawer placement='left' onClose={onClose} isOpen={isOpen} size="xs">
             <DrawerOverlay />
             <DrawerContent style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>
-            <DrawerHeader bgColor='rgb(30, 30, 31)' color="purple.300" display="flex" justifyContent="center">Genres</DrawerHeader>
-            <DrawerBody bgColor='rgb(30, 30, 31)' color="purple.300" display="flex" flexDir="column" gap="30px">
+            <DrawerHeader bgColor='rgb(30, 30, 31)' color="white" display="flex" justifyContent="center">Genres</DrawerHeader>
+            <DrawerBody bgColor='rgb(30, 30, 31)' color="white.300" display="flex" flexDir="column" gap="30px">
                 <Button onClick={() => {getGames(); setGenre('');}}>Popular</Button>
                 <Button onClick={() => handleClick('racing')}>Racing 🏎️💨</Button>
                 <Button onClick={() => handleClick('action')}>Action 💥</Button>
@@ -161,15 +160,15 @@ const goHome = () =>{
             <Spacer/>
             <Box _hover={{
                     animation: `${animation2}`,
-                    color: "white"
+                    color: "purple"
                 }}>
-            <Heading size='xl' color="purple.300" cursor="pointer" paddingLeft="150px" _hover={{color: "white"}} style={{ fontFamily: `'Orbitron Variable', sansSerif` }} onClick={() => goHome()}>Game Hub</Heading>
+            <Heading size='xl' color="white" cursor="pointer" paddingLeft="135px" _hover={{color: "purple.300"}} style={{ fontFamily: `'Orbitron Variable', sansSerif` }} onClick={() => goHome()}>Game Hub</Heading>
             </Box>
             <Spacer/>
             <Box>
             <HStack spacing="20px">
-                <Text color="purple.300" fontSize='xl'>Cart</Text>
-                <Button colorScheme='purple' fontSize='xl'>Logout</Button>
+                <Text color="white" fontSize='xl'>Cart</Text>
+                <Button colorScheme='white' fontSize='xl'>Login</Button>
             </HStack>
             </Box>
         </Box>
@@ -207,7 +206,7 @@ const goHome = () =>{
               <CardBody bgColor= 'rgb(30, 30, 31)' borderTopLeftRadius="20px" borderTopRightRadius="20px">
                 <Image src={game.background_image} alt={game.name} h='250px' borderRadius='lg' onClick={() => viewGameDetails(game.id)} cursor="pointer"/>
                 <HStack mt='6' spacing='3'>
-                  <Heading size='md' color="purple.500" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>{game.name}</Heading>
+                  <Heading size='md' color="white" style={{ fontFamily: `'Orbitron Variable', sansSerif` }}>{game.name}</Heading>
                 </HStack>
                 <HStack mt='6' spacing='3'>
                   {game.platforms.slice(0, 3).map((platform, index) => (
@@ -217,11 +216,11 @@ const goHome = () =>{
               </CardBody>
               <StackDivider bg='white' height="1px"/>
               <CardFooter bgColor='rgb(30, 30, 31)' borderBottomLeftRadius="20px" borderBottomRightRadius="20px">
-                <ButtonGroup spacing='2'>
-                  <Button variant='solid' colorScheme='purple'>
+                <ButtonGroup spacing='2' marginLeft="-20px">
+                  <Button variant='solid' colorScheme='white'  _hover={{color: "purple.300"}}>
                     Buy now
                   </Button>
-                  <Button variant='ghost' colorScheme='purple'>
+                  <Button variant='ghost' colorScheme='white' color="white"  _hover={{color: "purple.300"}}>
                     Add to cart
                   </Button>
                 </ButtonGroup>
@@ -231,16 +230,16 @@ const goHome = () =>{
         </SimpleGrid>
         {genre === ''? (
           <>
-            <HStack display="flex" justifyContent="center" paddingBottom="20px">
-              <Button bgColor='purple.300' color="white" variant='solid' minWidth="300px" onClick={previousPage}>
+            <HStack display="flex" justifyContent="center" paddingBottom="15px">
+              <Button bgColor='white' color="black" variant='solid' minWidth="300px" onClick={previousPage}>
                 Previous
               </Button>
-              <Button bgColor='purple.300' color="white" variant='solid' minWidth="300px" onClick={nextPage}>
+              <Button bgColor='white' color="black" variant='solid' minWidth="300px" onClick={nextPage}>
                 Next
               </Button>
             </HStack>
             <Box display="flex" justifyContent="center" paddingBottom="20px">
-              <Text color="white" border="2px" borderColor="purple.300" padding="10px" paddingLeft="20px" paddingRight="20px">{page}</Text>
+              <Text color="white" border="2px" borderColor="white.300" padding="10px" paddingLeft="20px" paddingRight="20px">{page}</Text>
             </Box>
           </>
         ) : null}

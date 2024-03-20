@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { SimpleGrid, Box, Heading, Card, CardBody, Image, Skeleton, Grid, Text, HStack, useBreakpointValue} from '@chakra-ui/react';
-import { useLocation, useParams } from 'react-router-dom';
-import { Fade, ScaleFade, Slide, SlideFade, Collapse } from '@chakra-ui/react'
+import { Box, Heading, Card, CardBody, Image, Grid, Text, HStack, useBreakpointValue} from '@chakra-ui/react';
+import { useLocation} from 'react-router-dom';
+import {ScaleFade} from '@chakra-ui/react'
 import ReactLoading from 'react-loading';
 import { Navbar } from '../components';
 
@@ -83,11 +83,11 @@ return (
                     </Box>
                     </CardBody>
                 </Card>
-                {movie.length == 0?
+                {movie.length === 0?
                 <>
                 <Card bgColor= 'rgb(30, 30, 31)'>
                     <CardBody bgColor='rgb(30, 30, 31)' display="flex" justifyContent="center" alignItems="center">
-                        <Heading color="white">No trailers available. Go search on youtube or smth.</Heading>
+                        <Heading as='h2' color="white" size='lg'>No trailers available. Go search on youtube or smth.</Heading>
                     </CardBody>
                 </Card>
                 
