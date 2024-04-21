@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom';
-import { SimpleGrid, Box, Heading, Card, CardBody, Image, CardFooter, Button, ButtonGroup, Input, Skeleton, HStack, StackDivider, Spacer, Text, keyframes, useDisclosure} from '@chakra-ui/react';
+import { SimpleGrid, Box, Heading, Card, CardBody, Image, CardFooter, Button, ButtonGroup, Input, Skeleton, HStack, StackDivider, Spacer, Text, keyframes, useDisclosure, useToast} from '@chakra-ui/react';
 import { ScaleFade} from '@chakra-ui/react'
 import {HamburgerIcon } from '@chakra-ui/icons'
 import '@fontsource-variable/orbitron';
@@ -11,14 +11,20 @@ import {
   DrawerOverlay,
   DrawerContent,
 } from '@chakra-ui/react'
+import Cookies from 'js-cookie';
+import { jwtDecode } from "jwt-decode";
 
 const Games = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
+  const [username, setUsername] = useState(null); // State to store the username
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [genre, setGenre] = useState('');
+  const [popup, setPopup] = useState(false);
+  const [popupFailed, setPopupFailed] = useState(false);
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure()
 
 const animationKeyframes1 = keyframes`
@@ -49,6 +55,17 @@ const previousPage = () => {
       setPage(page - 1);
     }
 };
+useEffect(() => {
+  // Check if the user is logged in using cookies
+  const token = Cookies.get('jwt');
+  console.log(token);
+  if (token) {
+      // If token exists, decode it to get user information
+      const decodedToken = jwtDecode(token);
+      setUsername(decodedToken.username);
+      console.log(username);
+  }
+}, []); // Empty dependency array means this effect will run only once after the component mounts
 
 const getGames = async () => {
   try {
@@ -104,6 +121,57 @@ const getGamesByGenre = async () => {
   }
 };
 
+
+const goLogout = async () => {
+  try {
+    const response = await fetch("http://localhost:3500/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      withCredentials: true,
+    });
+    if (response.ok) {
+      setPopup(true);
+    } else {
+      // Registration failed, handle error
+      setPopupFailed(true);
+      console.error("logout failed:", response.statusText);
+      // Optionally, show an error message to the user
+    }
+  } catch (error) {
+    console.error("Error during logout:", error.message);
+  }
+};
+
+useEffect(() => {
+  if (popup) {
+    toast({
+      title: "Logged out",
+      description: "You have successfully logged out",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
+    window.location.reload();
+    setPopup(false); // Reset popup state after displaying toast
+  }
+}, [popup]);
+
+useEffect(() => {
+  if (popupFailed) {
+    toast({
+      title: "Error",
+      description: "There was an error",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+    setPopupFailed(false); // Reset popup state after displaying toast
+  }
+}, [popupFailed]);
+
 const handleClick = async (game) => {
   setGenre(game);
 };
@@ -116,7 +184,11 @@ useEffect(() => {
 
 useEffect(() => {
     getGames();
-}, [page])
+}, [page]);
+
+const goLogin = () => {
+  navigate('/login');
+};
 
 const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -132,6 +204,7 @@ const goHome = () =>{
     <>
       <Box style={{backgroundColor: 'black', fontFamily: `'Orbitron Variable', sansSerif`, height: '100%',}} className='container'>
         <Box display="flex" flexDir="row" as="nav" p="20px" alignItems="center" pl="40px" pr="40px" justifyContent="center">
+        <HamburgerIcon color="white" boxSize={10} onClick={onOpen} cursor="pointer" _hover={{color: "purple.300"}}/>
             <Box
             _hover={{
                     animation: `${animation1}`,
@@ -139,7 +212,6 @@ const goHome = () =>{
                     transform: "rotate(0.5turn)",
                 }}
             >
-            <HamburgerIcon color="white" boxSize={10} onClick={onOpen} cursor="pointer" _hover={{color: "purple.300"}}/>
             </Box>
         <Drawer placement='left' onClose={onClose} isOpen={isOpen} size="xs">
             <DrawerOverlay />
@@ -158,17 +230,37 @@ const goHome = () =>{
             </DrawerContent>
         </Drawer>
             <Spacer/>
-            <Box _hover={{
+            <Box position = "absolute" _hover={{
                     animation: `${animation2}`,
                     color: "purple"
                 }}>
-            <Heading size='xl' color="white" cursor="pointer" paddingLeft="135px" _hover={{color: "purple.300"}} style={{ fontFamily: `'Orbitron Variable', sansSerif` }} onClick={() => goHome()}>Game Hub</Heading>
+            <Heading size='xl' color="white" cursor="pointer" paddingLeft="0" _hover={{color: "purple.300"}} style={{ fontFamily: `'Orbitron Variable', sansSerif` }} onClick={() => goHome()}>Game Hub</Heading>
             </Box>
             <Spacer/>
             <Box>
             <HStack spacing="20px">
-                <Text color="white" fontSize='xl'>Cart</Text>
-                <Button colorScheme='white' fontSize='xl'>Login</Button>
+            <Text color="white" fontSize="xl">
+              Cart
+            </Text>
+            {username ? (
+              <Text
+                color="white"
+                fontSize="xl"
+                cursor="pointer"
+                onClick={() => goLogout()}
+              >
+                Logout
+              </Text>
+            ) : (
+              <Button
+                colorScheme="white"
+                fontSize="xl"
+                cursor="pointer"
+                onClick={() => goLogin()}
+              >
+                Login
+              </Button>
+            )}
             </HStack>
             </Box>
         </Box>

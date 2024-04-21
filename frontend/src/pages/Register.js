@@ -1,33 +1,54 @@
-import {Box, Flex, Heading,Button, Input} from '@chakra-ui/react'
+import {Box, Flex, Heading, Button, Input} from '@chakra-ui/react'
 import { ScaleFade} from '@chakra-ui/react'
+import {useState, useEffect} from 'react';
 import { useNavigate} from 'react-router-dom'
 import {Navbar} from '../components'
-import { Link as ReactRouterLink } from 'react-router-dom'
-import { Link as ChakraLink, LinkProps } from '@chakra-ui/react'
 import {
     FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-  } from '@chakra-ui/react'
+    useToast
+  } from '@chakra-ui/react';
 
 
 const Register = () => {
 
-const navigate = useNavigate();
+const [user, setUser] = useState('');
+const [pwd, setPwd] = useState('');
+const [popup, setPopup] = useState(false);
+const [popupFailed, setPopupFailed] = useState(false);
 
-const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent the default form submission behavior
-    // Here you can access the form fields and their values from event.target
-    const formData = new FormData(event.target);
-    const email = formData.get('email');
-    const password = formData.get('password');
-    // Now you can do something with the email and password, like sending them to a server
-    console.log('Email:', email);
-    console.log('Password:', password);
-    // Optionally, you can navigate to another page after submitting the form
-    goToGames();
-  };
+const toast = useToast();
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await fetch('http://localhost:3500/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin':'http://localhost:5000',
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+      },
+      body: JSON.stringify({ user, pwd }),
+      credentials: 'include',
+      withCredentials: true
+    });
+
+    if (response.ok) {
+      setPopup(true);
+    } else {
+      // Registration failed, handle error
+      setPopupFailed(true);
+      console.error('Registration failed:', response.statusText);
+      // Optionally, show an error message to the user
+    }
+  } catch (error) {
+    console.error('Error during registration:', error.message);
+    setPopupFailed(true);
+    // Handle network error or other unexpected errors
+  }
+};
 
 const pageStyles = {
   backgroundColor: 'black',
@@ -38,9 +59,31 @@ const pageStyles = {
   fontFamily: `'Orbitron Variable', sansSerif`
 };
 
-const goToGames = () =>{
-  navigate('/games')
-}
+useEffect(() => {
+  if (popup) {
+    toast({
+      title: 'Account created.',
+      description: "We've created your account for you.",
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    });
+    setPopup(false); // Reset popup state after displaying toast
+  }
+}, [popup]);
+
+useEffect(() => {
+  if (popupFailed) {
+    toast({
+      title: 'Error',
+      description: "There was an error",
+      status: 'error',
+      duration: 9000,
+      isClosable: true,
+    });
+    setPopupFailed(false); // Reset popup state after displaying toast
+  }
+}, [popupFailed]);
 
 return (
     <>
@@ -56,9 +99,28 @@ return (
       <form onSubmit={handleSubmit}>
         <FormControl paddingBottom="20%" isRequired>
             <FormLabel color="white" fontSize ="xl">Email address</FormLabel>
-            <Input type='email' color="white" marginBottom="20px" fontSize ="l" name="email"/>
+            <Input
+                    type='email'
+                    color='white'
+                    marginBottom='20px'
+                    fontSize='l'
+                    value={user}
+                    onChange={(e) => setUser(e.target.value)}
+                    placeholder='Email address'
+                    required
+                  />
             <FormLabel color="white" fontSize ="xl" name="email">Password</FormLabel>
-            <Input type='password' color="white" fontSize ="l"/>
+            <Input
+                    type='password'
+                    color='white'
+                    fontSize='l'
+                    value={pwd}
+                    onChange={(e) => setPwd(e.target.value)}
+                    placeholder='Password'
+                    minLength = '8'
+                    maxLength = '20'
+                    required
+                  />
             <Button
             mt={8}
             colorScheme='white'

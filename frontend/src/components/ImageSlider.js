@@ -30,7 +30,7 @@ const ImageSlider = ({ imageUrls }) => {
       >
         {'<'}
       </Button>
-      <Image src={imageUrls[currentImageIndex]} alt="slider" maxHeight="800px" maxWidth="1500px"/>
+      <Image src={imageUrls[currentImageIndex]} alt="slider" overflow = "hidden"/>
       <Button
         width="50px"
         height="50px"

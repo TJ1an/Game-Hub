@@ -3,11 +3,12 @@ import { Box, Heading, Card, CardBody, Image, Grid, Text, HStack, useBreakpointV
 import { useLocation} from 'react-router-dom';
 import {ScaleFade} from '@chakra-ui/react'
 import ReactLoading from 'react-loading';
-import { Navbar } from '../components';
+import { Navbar, ImageSlider } from '../components';
 
 const GameDetails = () =>{
     const [details, setDetails] = useState([]);
-    const [movie, setMovie] = useState([])
+    const [movie, setMovie] = useState([]);
+    const [screenshot, setScreenshot] = useState([]);
     const location = useLocation();
     const [loading, setLoading] = useState(false);
     const id = location.state.id;
@@ -25,26 +26,32 @@ const getGameDetails = async () => {
         setLoading(true);
         const detailResponse = await fetch(`http://api.rawg.io/api/games/${id}?key=${process.env.REACT_APP_API_KEY}`);
         const movieResponse = await fetch(`http://api.rawg.io/api/games/${id}/movies?key=${process.env.REACT_APP_API_KEY}`);
+        const screenshotResponse = await fetch(`http://api.rawg.io/api/games/${id}/screenshots?key=${process.env.REACT_APP_API_KEY}`);
         
-        if (!detailResponse.ok || !movieResponse.ok) {
+        if (!detailResponse.ok || !movieResponse.ok || !screenshotResponse.ok) {
             throw new Error('Failed to fetch data');
         }
 
         const gameData = await detailResponse.json();
         const movieData = await movieResponse.json();
+        const screenshotData = await screenshotResponse.json();
 
         console.log(gameData);
         console.log(movieData);
+        console.log(screenshotData);
         
         setDetails(gameData);
-        setMovie(movieData.results.slice(0, 1)); // Assuming movieData contains an array named results
-
+        setMovie(movieData.results.slice(0, 1));
+        setScreenshot(screenshotData.results);
         setLoading(false);
     } catch (error) {
         console.error('Error fetching data:', error);
         // Handle error, show message to user, etc.
     }
 }
+
+const imagesArray = screenshot.map(screenshot => screenshot.image);
+console.log(imagesArray);
 
 // Function to extract English text from a mixed-language string
 const extractEnglishText = (mixedText) => {
@@ -79,7 +86,7 @@ return (
                 <Card bgColor= 'rgb(30, 30, 31)'>
                     <CardBody bgColor= 'rgb(30, 30, 31)' borderTopLeftRadius="20px" borderTopRightRadius="20px" display="flex" justifyContent="center" alignItems="center">\
                     <Box>
-                        <Image src={details.background_image}></Image>
+                        <ImageSlider imageUrls={imagesArray}/>
                     </Box>
                     </CardBody>
                 </Card>
