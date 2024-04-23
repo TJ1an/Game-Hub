@@ -74,7 +74,7 @@ return (
             <Navbar />
             </Box>
             <Box className="loading-page" display="flex" justifyContent="center" alignItems="center" height="100vh" bgColor="black">
-                <ReactLoading type="cubes" color="purple" height={100} width={50} />
+                <ReactLoading type="cubes" color="white" height={100} width={50} />
             </Box>
         </> :
         <ScaleFade initialScale={0.8} in={!loading}>
